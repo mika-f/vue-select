@@ -680,6 +680,15 @@
         type: String,
         default: 'auto'
       },
+
+      /**
+       * When true, select search input even not choised exist options.
+       * @type {Boolean}
+       */
+      autoSelectSearchInput: {
+        type: Boolean,
+        default: false
+      },
     },
 
     data() {
@@ -708,7 +717,7 @@
        * @param  {string|object} old
        * @return {void}
        */
-			mutableValue(val, old) {
+      mutableValue(val, old) {
         if (this.multiple) {
           this.onChange ? this.onChange(val) : null
         } else {
@@ -890,6 +899,9 @@
        * @return {void}
        */
       onSearchBlur() {
+        if (this.autoSelectSearchOnBlur) {
+          this.select(this.search)
+        }
         if (this.clearSearchOnBlur) {
           this.search = ''
         }
@@ -970,6 +982,14 @@
           rtl: this.dir === 'rtl',
           disabled: this.disabled
         }
+      },
+
+      /**
+       * If search text should keep on blur
+       * @return {Boolean} True when single, searching, taggable, open and autoSelectSearchInput
+       */
+      autoSelectSearchOnBlur() {
+        return this.autoSelectSearchInput && !this.multiple && this.searching && this.taggable && this.open
       },
 
       /**

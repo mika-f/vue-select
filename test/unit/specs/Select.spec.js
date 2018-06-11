@@ -1114,8 +1114,23 @@ describe('Select.vue', () => {
 						done()
 					})
 				})
+    })
 
-		})
+    it('shoule select the search input on focus lost when autoSelectSearchInput is true', (done) => {
+      const vm = new Vue({
+        template: `<div><v-select ref="select" taggable auto-select-search-input></v-select></div>`
+      }).$mount()
+      expect(vm.$refs.select.autoSelectSearchInput, true)
+
+      vm.$refs.select.search = 'one'
+      vm.$children[0].open = true
+      vm.$children[0].onSearchBlur()
+      Vue.nextTick(() => {
+        expect(vm.$refs.select.mutableValue).toEqual('one')
+        expect(vm.$refs.select.search).toEqual('')
+        done()
+      })
+    })
 	})
 
 	describe('Asynchronous Loading', () => {
